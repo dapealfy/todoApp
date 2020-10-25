@@ -87,9 +87,11 @@ class _MyHomePageState extends State<MyHomePage> {
     todoController.clear();
   }
 
-  void hapusData(data) {
+  void hapusData(data) async {
+    final SharedPreferences prefs = await _prefs;
     setState(() {
       listTodo.remove(data);
+      prefs.setString('listTodo', json.encode(listTodo));
     });
   }
 
@@ -122,9 +124,11 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  void updateDataTodo(index, title) {
+  void updateDataTodo(index, title) async {
+    final SharedPreferences prefs = await _prefs;
     setState(() {
       listTodo[index]['title'] = title;
+      prefs.setString('listTodo', json.encode(listTodo));
     });
   }
 
@@ -140,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: listTodo.length,
+              itemCount: listTodo == null ? 0 : listTodo.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
